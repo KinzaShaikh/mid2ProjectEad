@@ -1,5 +1,6 @@
 const User = require('../models/UserModel');
 const path = require('path');
+const fs = require('fs')
 const displayHome = (req,res)=>{
     res.render('registration')
 }
@@ -28,6 +29,28 @@ const registerUser = (req,res)=>{
     //res.redirect('/')
 }
 
+const deleteUser=(req,res)=>{
+    const { id } = req.query;
+    console.log(id)
+ User.findById(id, (error, doc) => {
+    if (!error) {
+      const pic = path.resolve(__dirname, "../public/images/", doc.image);
+      fs.unlinkSync(pic);
+      User.findByIdAndDelete(id, (error, data) => {
+        if (!error) {
+      //      console.log("1");
+          res.redirect("displayUsers");
+        } else {
+          res.redirect("/");
+        }
+      });
+    }
+    else{
+        console.log("error2")
+    }
+  });
+}
+
 const displayUsers= async(req,res)=>{
 const data = await User.find();
   if (data) {
@@ -41,7 +64,7 @@ const display = (req,res)=>{
 }
 
 module.exports={
-    displayHome,
+    deleteUser,displayHome,
     displayError,
     registerUser,
     display,

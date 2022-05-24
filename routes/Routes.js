@@ -9,5 +9,6 @@ route.get("/displayUsers",controller.displayUsers);
 
 route.get('/display',controller.display)
 //route.get('/userRegistered',controller.displayUsers);
+route.get('/deleteUser',controller.deleteUser);
 
 module.exports = route;
