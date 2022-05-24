@@ -63,10 +63,59 @@ const display = (req,res)=>{
     res.render('display')
 }
 
+const updateUser= async (req,res)=>{
+    const { id } = req.query;
+  //console.log(id)
+  const data = await User.findById(id);
+  if (data) {
+    res.render("updateUser", { user: data });
+  } else {
+    res.redirect("displayUsers");
+  }
+}
+
+const userUpdated = (req,res)=>{
+    const { id } = req.query;
+    const {fullname,email,phoneNumber,country,state,city,address,zipcode} = req.body;
+  const { image } = req.files;
+
+  image.mv(path.resolve(__dirname, "../public/images", image.name), (error) => {
+    if (!error) {
+      User.findById(id, (error, data) => {
+        if (!error) {
+          const oldImg = path.resolve(
+            __dirname,
+            "../public/images",
+            data.image
+          );
+          fs.unlinkSync(oldImg);
+
+          User.findByIdAndUpdate(
+            id,
+            {
+                fullname:fullname,email:email,phoneNumber:phoneNumber,country:country,state:state,city:city,address:address,zipcode:zipcode, image:image.name
+       
+            },
+            (error, data) => {
+              if (!error) {
+                res.redirect("displayUsers");
+              } else {
+                res.redirect("updateUser");
+              }
+            }
+          );
+        }
+      });
+    }
+  });
+}
+
 module.exports={
     deleteUser,displayHome,
     displayError,
     registerUser,
     display,
-    displayUsers
+    displayUsers,
+    updateUser,
+    userUpdated
 }

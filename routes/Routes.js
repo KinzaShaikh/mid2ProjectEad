@@ -10,5 +10,6 @@ route.get("/displayUsers",controller.displayUsers);
 route.get('/display',controller.display)
 //route.get('/userRegistered',controller.displayUsers);
 route.get('/deleteUser',controller.deleteUser);
-
+route.get('/updateUser',controller.updateUser);
+route.post('/update', controller.userUpdated)
 module.exports = route;
