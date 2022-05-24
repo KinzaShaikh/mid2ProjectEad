@@ -17,20 +17,33 @@ const registerUser = (req,res)=>{
             fullname:fullname,email:email,phoneNumber:phoneNumber,country:country,state:state,city:city,address:address,zipcode:zipcode, image:image.name
         },(error)=>{
             if(!error){
-                console.log("done")
+                res.redirect(`/displayUsers`);
             }else{
                 console.log("issue")
             }
         })
     })
 
-    console.log(image)
-    res.redirect('/')
+   // console.log(image)
+    //res.redirect('/')
 }
 
+const displayUsers= async(req,res)=>{
+const data = await User.find();
+  if (data) {
+    res.render("displayUsers", { user: data });
+  } else {
+    res.render("/");
+  }
+}
+const display = (req,res)=>{
+    res.render('display')
+}
 
 module.exports={
     displayHome,
     displayError,
-    registerUser
+    registerUser,
+    display,
+    displayUsers
 }
